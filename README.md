@@ -20,6 +20,7 @@ https://github.com/dlwhitehurst/integration-tools
  - Clean slate, i.e. no Kubernetes objects in place or running
  - DNS and Registry enabled
  - Available DHCP IP on bridged network to host (VM)
+ - Node.js and npm are installed
 
 ## Lab:
 High-level objectives include:
@@ -69,3 +70,60 @@ The updated states application is available and ready for lab objective no. 4. L
 
 **Lab Objective - 2**
 
+Remember the environment variables in our `states` application's database configuration or `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, and `DB_SCHEMA`? We will use the Kubernetes objects ConfigMap and Secret to pass the values into the `states` application also when we create the MySQL service here. The ConfigMap and Secret will be created within our cluster. These objects will only be available for interaction between objects that specify their use. These objects will not be available external to the cluster (or host).
+
+The ConfigMap will be used like a property file for `DB_HOST` and `DB_SCHEMA`. Our database user and password will be captured in the Secret object.
+
+Create a file called `config-map.yaml` for the non-sensitive database information. I've created that file and it is part of this software repository. Here are the file contents:
+
+```
+# Non-sensitive database configuration 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config-map 
+data:
+  host: mysql-service   # service dns
+  schema: reference
+```
+
+Now create a file called `secret.yaml` for the sensitive stuff. Again, I've created this file and its contents are shown here:
+
+```
+# sensitive database information
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret 
+data:
+  username: <base64-me>  	# base64 encoded 'Secret' username
+  password: <base64-me> 	# base64 encoded 'Secret' password
+```
+
+I should note first that I'm breaking security rules here because I'm going use the `root` for my database credentials all over. My second note is about the username and password. One is useless with the other. And, you should never store the username and password in your software repo. The placeholder `<base64-me>` means that we will add a base64 representation of these credentials in our Secret before we `apply` it to our cluster.
+
+I'll document the base64 how-to here using `abc123` as a plain-text example:
+
+```
+echo 'abc123' | base64
+```
+
+The `base64` Linux utility should be part of every Linux distribution and the command above pipes the text `abc123` to the utility and the output would look like this:
+
+```
+YWJjMTIzCg==
+```
+
+**NOTE:** The base64 representation is just an obfuscation of the plain-text and provides a *reasonable* security for the password. It also exhibits the behaviour where the base64 equivalent of `root` is always `cm9vdAo=` and thereby shoring up my note that the `root` user should not be used in place of an application user in production.
+
+Now that we have our ConfigMap and Secret, we can `apply` or create these Kubernetes objects in our cluster. Please note that we are only creating a ConfigMap and a Secret configuration with the namespaces `db-config-map` and `db-secret` respectively. At this time they are not being used.
+
+Create the configurations using the manifest files we created (or you cloned).
+
+```
+kubectl apply -f config-map.yaml
+kubectl apply -f secret.yaml
+```
+Now that our configurations are in place, we will turn to the specification of our MySQL service. In Kubernetes terms, MySQL is a stateful or storage application, i.e. the data is timely and needs to be persisted. Also care of the instances under control of Kubernetes is very different from more ephemeral and highly-scalable compute instances. While stateful applications can scale, we are starting small with a single-instance (non-replicated) MySQL image.
+
+   

@@ -1,0 +1,8 @@
+# Non-sensitive database configuration 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config-map 
+data:
+  host: mysql-service   # service dns
+  schema: reference 
