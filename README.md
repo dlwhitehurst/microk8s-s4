@@ -83,7 +83,7 @@ kind: ConfigMap
 metadata:
   name: db-config-map 
 data:
-  host: mysql-service   # service dns
+  host: mysql   # service dns
   schema: reference
 ```
 
