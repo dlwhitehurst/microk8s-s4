@@ -44,7 +44,7 @@ I've opened and inspected the states application for any properties that would r
 
 I revised/refactored this file today to look like so:
 
-```
+```javascript
 module.exports = {
   HOST: process.env.DB_HOST,
   USER: process.env.DB_USERNAME,
@@ -60,7 +60,7 @@ Open up a shell to your VM.
 
 I'm doing all my MicroK8S lab work at `/home/ubuntu` or login account. I have a clone of `states` already so I'm going to remove it and clone fresh.
 
-```
+```bash
 rm -rf states
 git clone https://github.com/dlwhitehurst/states.git
 ```
@@ -76,7 +76,7 @@ The ConfigMap will be used like a property file for `DB_HOST` and `DB_SCHEMA`. O
 
 Create a file called `config-map.yaml` for the non-sensitive database information. I've created that file and it is part of this software repository. Here are the file contents:
 
-```
+```yaml
 # Non-sensitive database configuration 
 apiVersion: v1
 kind: ConfigMap
@@ -89,7 +89,7 @@ data:
 
 Now create a file called `secret.yaml` for the sensitive stuff. Again, I've created this file and its contents are shown here:
 
-```
+```yaml
 # sensitive database information
 apiVersion: v1
 kind: Secret
@@ -104,13 +104,13 @@ I should note first that I'm breaking security rules here because I'm going use 
 
 I'll document the base64 how-to here using `abc123` as a plain-text example:
 
-```
+```bash
 echo 'abc123' | base64
 ```
 
 The `base64` Linux utility should be part of every Linux distribution and the command above pipes the text `abc123` to the utility and the output would look like this:
 
-```
+```bash
 YWJjMTIzCg==
 ```
 
@@ -120,10 +120,9 @@ Now that we have our ConfigMap and Secret, we can `apply` or create these Kubern
 
 Create the configurations using the manifest files we created (or you cloned).
 
-```
+```bash
 kubectl apply -f config-map.yaml
 kubectl apply -f secret.yaml
 ```
 Now that our configurations are in place, we will turn to the specification of our MySQL service. In Kubernetes terms, MySQL is a stateful or storage application, i.e. the data is timely and needs to be persisted. Also care of the instances under control of Kubernetes is very different from more ephemeral and highly-scalable compute instances. While stateful applications can scale, we are starting small with a single-instance (non-replicated) MySQL image.
 
-   
