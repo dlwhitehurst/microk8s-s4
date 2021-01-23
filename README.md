@@ -30,3 +30,26 @@ High-level objectives include:
 4. Build a docker image of States application and make available in the MicroK8S image registry.
 5. Configure a States Service and ultimately a composite scalable Deployment using the stand-alone MySQL. Note that MySQL can be later configured to be scalable but this is much more complex.
 
+## Notes:
+Detailed notes will be captured here as this lab objective is accomplished. This experiment is being done as I learn about Kubernetes and train myself for a huge upcoming project.
+
+These notes will follow the lab objectives in order but may re-order tasks mid-stream if required.
+
+### Analyze and Refactor the Web Application for Kubernetes
+
+**Lab Objective - 1**
+I've opened and inspected the states application for any properties that would require a placeholder. The states application was created specifically for my Kubernetes learning. The application project contains a directory specifically for database configuration at `<project>/app/config` and a single file `db-config.js`.
+
+I revised/refactored this file today to look like so:
+
+```
+module.exports = {
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USERNAME,
+  PASSWORD: process.env.DB_PASSWORD,
+  DB: process.env.DB_SCHEMA 
+};
+```
+This change was to replace strings that were there and use `process.env.<ENV_VAR>`. This removes or provides separation-of-concern from the web application (states) and the container platform. Also, our use of ConfigMap and Secret (Kuberbetes) objects provides better security and keeps sensitive information out of the software repository. In my case, the hard-coded credentials "were"in the repository only because all of this is non-production and for training.  
+
+
