@@ -16,7 +16,7 @@ https://github.com/dlwhitehurst/integration-tools
  - Create schema user on MySQL and add to ConfigMap and Secrets in another scenario. Use root (insecure) for now.
 
 ## Prerequisites:
- - Running MicroK8S installation
+ - Running MicroK8S installation on Ubuntu 20.04 LTS (Long Term Support)
  - Clean slate, i.e. no Kubernetes objects in place or running
  - DNS and Registry enabled
  - Available DHCP IP on bridged network to host (VM)
@@ -38,6 +38,7 @@ These notes will follow the lab objectives in order but may re-order tasks mid-s
 ### Analyze and Refactor the Web Application for Kubernetes
 
 **Lab Objective - 1**
+
 I've opened and inspected the states application for any properties that would require a placeholder. The states application was created specifically for my Kubernetes learning. The application project contains a directory specifically for database configuration at `<project>/app/config` and a single file `db-config.js`.
 
 I revised/refactored this file today to look like so:
@@ -50,6 +51,21 @@ module.exports = {
   DB: process.env.DB_SCHEMA 
 };
 ```
-This change was to replace strings that were there and use `process.env.<ENV_VAR>`. This removes or provides separation-of-concern from the web application (states) and the container platform. Also, our use of ConfigMap and Secret (Kuberbetes) objects provides better security and keeps sensitive information out of the software repository. In my case, the hard-coded credentials "were"in the repository only because all of this is non-production and for training.  
+This change was to replace strings that were there and use `process.env.<ENV_VAR>`. This removes or provides separation-of-concern from the web application (states) and the container platform. Also, our use of ConfigMap and Secret (Kuberbetes) objects provides better security and keeps sensitive information out of the software repository. In my case, the hard-coded credentials "were"in the repository only because all of this is non-production and for training.
 
+Open up a shell to your VM.
+
+`multipass shell "discerning-dragonfly"`
+
+I'm doing all my MicroK8S lab work at `/home/ubuntu` or login account. I have a clone of `states` already so I'm going to remove it and clone fresh.
+
+```
+rm -rf states
+git clone https://github.com/dlwhitehurst/states.git
+```
+The updated states application is available and ready for lab objective no. 4. Let's move on to MySQL next.
+
+### Single-Instance Stateful MySQL
+
+**Lab Objective - 2**
 
