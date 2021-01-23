@@ -6,8 +6,8 @@ perform my training scenario in my MicroK8S Lab.
 Run the states app on MicroK8S with a stateful MySql hosting and use ConfigMap and Secret objects (Kubernetes).
 
 ## References:
-https://github.com/dlwhitehurst/states/
-https://github.com/dlwhitehurst/integration-tools
+ - https://github.com/dlwhitehurst/states/
+ - https://github.com/dlwhitehurst/integration-tools
 
 ## Assumptions:
  - HTTP only
