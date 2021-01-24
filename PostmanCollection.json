@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "48236528-ea9a-4c68-a4fc-03e36b6e1701",
+		"name": "microk8s-s4",
+		"description": "This is a Postman collection for the lab scenario no. 4 on MicroK8S",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET-states",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.25:8080/states",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"25"
+					],
+					"port": "8080",
+					"path": [
+						"states"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST-state",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"name\": \"Florida\",\r\n        \"code\": \"FL\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://192.168.1.25:8080/states",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"25"
+					],
+					"port": "8080",
+					"path": [
+						"states"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

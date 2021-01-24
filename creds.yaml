@@ -1,9 +1,0 @@
-# sensitive database information for general user
-apiVersion: v1
-kind: Secret
-metadata:
-  name: db-credentials 
-data:
-  username: <base64-me>  	# base64 encoded 'Secret' username
-  password: <base64-me> 	# base64 encoded 'Secret' password
-

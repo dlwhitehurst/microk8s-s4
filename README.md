@@ -126,3 +126,13 @@ kubectl apply -f secret.yaml
 ```
 Now that our configurations are in place, we will turn to the specification of our MySQL service. In Kubernetes terms, MySQL is a stateful or storage application, i.e. the data is timely and needs to be persisted. Also care of the instances under control of Kubernetes is very different from more ephemeral and highly-scalable compute instances. While stateful applications can scale, we are starting small with a single-instance (non-replicated) MySQL image.
 
+Due to the size of the database configuration manifest `mysql.yaml`, I'm just going to refer to YAML found here in this repository.
+
+https://github.com/dlwhitehurst/microk8s-s4/blob/main/mysql.yaml
+
+We will now `apply` this manifest and create the MySQL service.
+
+```bash
+kubectl apply -f mysql.yaml
+```
+
