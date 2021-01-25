@@ -35,7 +35,7 @@ spec:
     spec:                 
       containers: 
       - name: smarts 
-        image: localhost:32000/states:registry   # docker image of backend application
+        image: localhost:32000/states:registry   
         env:   # Setting Enviornmental Variables
           - name: DB_HOST   # Setting Database host address from configMap
             valueFrom: 
